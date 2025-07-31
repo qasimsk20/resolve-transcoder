@@ -34,7 +34,7 @@ Follow these steps to install `resolve-transcoder` on your system:
 
 1.  **Clone the repository (or download the source code):**
     ```bash
-    git clone https://github.com/YOUR_USERNAME/resolve-transcoder.git
+    git clone https://github.com/qasimsk20/resolve-transcoder.git
     cd resolve-transcoder
     ```
     *(Replace `YOUR_USERNAME` with your actual GitHub username after you've uploaded the repository.)*
