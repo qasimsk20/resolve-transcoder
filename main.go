@@ -15,9 +15,7 @@ import (
 	progressbar "github.com/schollz/progressbar/v3"
 )
 
-const (
-	version = "v0.1.0"
-)
+var version = "v0.1.0"
 
 func main() {
 	if len(os.Args) < 2 {
