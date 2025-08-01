@@ -1,87 +1,86 @@
 name: Release
+
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
 
-    jobs:
-      build:
-        runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.23'  # Updated to match a valid Go version
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'  # Update the Go version if needed
 
-    - name: Cache Go modules
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cache/go-build
-          ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
 
-    - name: Get dependencies
-      run: go mod download
+      - name: Get dependencies
+        run: go mod download
 
-    - name: Run tests
-      run: go test -v ./...
+      - name: Run tests
+        run: go test -v ./...
 
-    - name: Build for all platforms
-      run: |
-        mkdir -p build
+      - name: Build for all platforms
+        run: |
+          mkdir -p build
 
-        # Set version from tag
-        VERSION=${GITHUB_REF#refs/tags/}
-        LDFLAGS="-s -w -X main.version=${VERSION}"
+          VERSION=${GITHUB_REF#refs/tags/}
+          LDFLAGS="-s -w -X main.version=${VERSION}"
 
-        # Windows
-        GOOS=windows GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-windows-amd64.exe .
-        GOOS=windows GOARCH=arm64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-windows-arm64.exe .
+          # Windows
+          GOOS=windows GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-windows-amd64.exe .
+          GOOS=windows GOARCH=arm64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-windows-arm64.exe .
 
-        # macOS
-        GOOS=darwin GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-darwin-amd64 .
-        GOOS=darwin GOARCH=arm64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-darwin-arm64 .
+          # macOS
+          GOOS=darwin GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-darwin-amd64 .
+          GOOS=darwin GOARCH=arm64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-darwin-arm64 .
 
-        # Linux
-        GOOS=linux GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-linux-amd64 .
-        GOOS=linux GOARCH=arm64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-linux-arm64 .
+          # Linux
+          GOOS=linux GOARCH=amd64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-linux-amd64 .
+          GOOS=linux GOARCH=arm64 go build -ldflags "${LDFLAGS}" -o build/resolve-transcoder-linux-arm64 .
 
-        # Verify builds
-        ls -la build/
+          ls -la build/
 
-    - name: Create release packages
-      run: |
-        mkdir -p release
-        VERSION=${GITHUB_REF#refs/tags/}
+      - name: Create release packages
+        run: |
+          mkdir -p release
+          VERSION=${GITHUB_REF#refs/tags/}
 
-        # Windows packages
-        zip -j release/resolve-transcoder-${VERSION}-windows-amd64.zip build/resolve-transcoder-windows-amd64.exe README.md LICENSE
-        zip -j release/resolve-transcoder-${VERSION}-windows-arm64.zip build/resolve-transcoder-windows-arm64.exe README.md LICENSE
+          # Windows packages
+          zip -j release/resolve-transcoder-${VERSION}-windows-amd64.zip build/resolve-transcoder-windows-amd64.exe README.md LICENSE
+          zip -j release/resolve-transcoder-${VERSION}-windows-arm64.zip build/resolve-transcoder-windows-arm64.exe README.md LICENSE
 
-        # macOS packages  
-        tar -czf release/resolve-transcoder-${VERSION}-darwin-amd64.tar.gz -C build resolve-transcoder-darwin-amd64 -C .. README.md LICENSE
-        tar -czf release/resolve-transcoder-${VERSION}-darwin-arm64.tar.gz -C build resolve-transcoder-darwin-arm64 -C .. README.md LICENSE
+          # macOS packages
+          tar -czf release/resolve-transcoder-${VERSION}-darwin-amd64.tar.gz -C build resolve-transcoder-darwin-amd64 -C .. README.md LICENSE
+          tar -czf release/resolve-transcoder-${VERSION}-darwin-arm64.tar.gz -C build resolve-transcoder-darwin-arm64 -C .. README.md LICENSE
 
-        # Linux packages
-        tar -czf release/resolve-transcoder-${VERSION}-linux-amd64.tar.gz -C build resolve-transcoder-linux-amd64 -C .. README.md LICENSE
-        tar -czf release/resolve-transcoder-${VERSION}-linux-arm64.tar.gz -C build resolve-transcoder-linux-arm64 -C .. README.md LICENSE
+          # Linux packages
+          tar -czf release/resolve-transcoder-${VERSION}-linux-amd64.tar.gz -C build resolve-transcoder-linux-amd64 -C .. README.md LICENSE
+          tar -czf release/resolve-transcoder-${VERSION}-linux-arm64.tar.gz -C build resolve-transcoder-linux-arm64 -C .. README.md LICENSE
 
-        # Verify packages
-        ls -la release/
+          ls -la release/
 
-    - name: Create Release
-      uses: softprops/action-gh-release@v2  # Updated to v2
-      with:
-        files: release/*
-        generate_release_notes: true
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
