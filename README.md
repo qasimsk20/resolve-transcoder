@@ -13,7 +13,6 @@ DaVinci Resolve on Linux, especially the free version, has known limitations wit
 *   **Simple Command-Line Interface:** Easy to use by providing the input file path.
 *   **DaVinci Resolve Compatibility:** Transcodes video to DNxHD and audio to ALAC, wrapped in a MOV container.
 *   **Error Handling:** Checks for file existence and provides informative messages.
-*   **Open Source:** Freely available for use, modification, and distribution.
 
 ## Prerequisites
 
@@ -75,10 +74,6 @@ resolve-transcoder "/home/vermillion/system 83/AQOsIDbBzoopqt-wY5GYkbm4z5KIRhuxj
 The transcoded file will be saved in the same directory as the input file, with `_transcoded.mov` appended to its name.
 
 For example, if your input was `my_video.mp4`, the output will be `my_video_transcoded.mov`.
-
-## Contributing
-
-Contributions are welcome! If you find a bug or have a feature request, please open an issue on the GitHub repository. If you'd like to contribute code, please fork the repository and submit a pull request.
 
 ## License
 
