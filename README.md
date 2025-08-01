@@ -10,14 +10,19 @@ DaVinci Resolve on Linux, especially the free version, has known limitations wit
 
 ## Features
 
-*   **Simple Command-Line Interface:** Easy to use by providing the input file path.
-*   **DaVinci Resolve Compatibility:** Transcodes video to DNxHD and audio to ALAC, wrapped in a MOV container.
-*   **Error Handling:** Checks for file existence and provides informative messages.
+- **Simple Command-Line Interface:** Easy to use by providing the input file path
+- **DaVinci Resolve Compatibility:** Transcodes video to DNxHD and audio to ALAC, wrapped in a MOV container
+- **Real-time Progress Tracking:** Visual progress bar with ETA and speed information
+- **Multiple Format Support:** Works with MP4, MKV, AVI, MOV, and M4V files
+- **Cross-platform:** Works on Linux, macOS, and Windows
+- **Error Handling:** Checks for file existence and provides informative messages
+- **Dependency Checking:** Verifies FFmpeg installation before starting
 
 ## Prerequisites
 
-Before using `resolve-transcoder`, ensure you have the following installed on your Arch Linux system:
+Before using `resolve-transcoder`, ensure you have the following installed on your system:
 
+### Arch Linux
 *   **Go (Golang):** Required to build the program from source.
     ```bash
     sudo pacman -S go
@@ -27,54 +32,100 @@ Before using `resolve-transcoder`, ensure you have the following installed on yo
     sudo pacman -S ffmpeg
     ```
 
+### Other Linux Distributions
+- Ubuntu/Debian: `sudo apt install ffmpeg golang-go`
+- CentOS/RHEL: `sudo yum install ffmpeg golang`
+
+### macOS
+- Install via Homebrew: `brew install ffmpeg go`
+
+### Windows
+- Download FFmpeg from [ffmpeg.org](https://ffmpeg.org/download.html)
+- Download Go from [golang.org](https://golang.org/dl/)
+
 ## Installation
 
-Follow these steps to install `resolve-transcoder` on your system:
+### Option 1: Download Pre-built Binary (Recommended)
 
-1.  **Clone the repository (or download the source code):**
+1. Go to the [Releases page](https://github.com/qasimsk20/resolve-transcoder/releases)
+2. Download the appropriate version for your platform
+3. Extract the archive
+4. Move the executable to your PATH:
+   ```bash
+   sudo mv resolve-transcoder /usr/local/bin/
+   ```
+
+### Option 2: Build from Source
+
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com/qasimsk20/resolve-transcoder.git
     cd resolve-transcoder
     ```
 
-
 2.  **Build the executable:**
     ```bash
     go build -o resolve-transcoder
     ```
-    This will create an executable file named `resolve-transcoder` in the current directory.
 
-3.  **Install the executable to your system's PATH:**
-    To make the program accessible from any directory, move it to a directory included in your system's `PATH` (e.g., `/usr/local/bin`).
+3.  **Install to system PATH:**
     ```bash
     sudo mv resolve-transcoder /usr/local/bin/
     ```
 
 4.  **Verify installation:**
-    You can test if the program is correctly installed by running:
     ```bash
-    resolve-transcoder
+    resolve-transcoder --version
     ```
-    It should output the usage message: `Usage: resolve-transcoder <input_file_path>`
 
 ## Usage
 
-To transcode an MP4 file, simply run `resolve-transcoder` followed by the path to your input MP4 file. If the path contains spaces, enclose it in double quotes.
-
+### Basic Usage
 ```bash
-resolve-transcoder "/path/to/your/video with spaces.mp4"
+resolve-transcoder input_video.mp4
 ```
 
-**Example:**
+This will create `input_video_resolve.mov` in the same directory.
+
+### Command-line Options
+```bash
+resolve-transcoder --help        # Show help information
+resolve-transcoder --version     # Show version number
+```
+
+### Examples
 
 ```bash
+# Transcode a single file
+resolve-transcoder my_video.mp4
+
+# Transcode with full path (use quotes for spaces)
+resolve-transcoder "/path/to/video with spaces.mkv"
+
+# Real example
 resolve-transcoder "/home/vermillion/system 83/AQOsIDbBzoopqt-wY5GYkbm4z5KIRhuxjuPhHE6SAr5rT27ljEEiHKZmrLX8oNs-ZAIgd3yAeUcAtDglJTEz4QQT5OeHhdgjaW3hCO0.mp4"
 ```
 
-The transcoded file will be saved in the same directory as the input file, with `_transcoded.mov` appended to its name.
+The transcoded file will be saved in the same directory as the input file, with `_resolve.mov` appended to its name.
 
-For example, if your input was `my_video.mp4`, the output will be `my_video_transcoded.mov`.
+## Output Format
 
-## License
+The transcoded files use these specifications optimized for DaVinci Resolve:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **Video Codec:** DNxHR HQ (high quality, edit-friendly)
+- **Audio Codec:** ALAC (lossless)
+- **Container:** MOV (QuickTime)
+- **Pixel Format:** YUV 4:2:2 (professional broadcast standard)
+
+## Development
+
+### Building for Multiple Platforms
+```bash
+make build-all    # Build for all platforms
+make release      # Create release packages
+```
+
+### Running Tests
+```bash
+make test
+```
