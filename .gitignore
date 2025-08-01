@@ -1,3 +1,23 @@
-resolve-transcoder
-*.mod
-*.sum
+# Build artifacts
+build/
+dist/
+*.exe
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Go specific
+*.test
+*.prof
+
+# Temporary files
+*.tmp
+*.temp
