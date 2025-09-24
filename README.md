@@ -1,4 +1,12 @@
-# resolve-transcoder
+<h1 align = center> resolve-transcoder </h1>
+<div align="center">
+  
+![GitHub last commit](https://img.shields.io/github/last-commit/qasimsk20/supersonic.nvim?style=for-the-badge&labelColor=101418&color=%2389b4fa)
+![GitHub Repo stars](https://img.shields.io/github/stars/qasimsk20/supersonic.nvim?style=for-the-badge&labelColor=101418&color=%23cba6f7)
+![Repo size](https://img.shields.io/github/repo-size/qasimsk20/supersonic.nvim?style=for-the-badge&labelColor=101418&color=%23d3bfe6)
+![License](https://img.shields.io/github/license/qasimsk20/supersonic.nvim?style=for-the-badge&labelColor=101418&color=%23cba6f7)
+
+</div>
 
 `resolve-transcoder` is a simple command-line utility written in Go that helps DaVinci Resolve users on Linux transcode unsupported MP4 video files (typically H.264/H.265 video with AAC audio) into a DaVinci Resolve-compatible format (DNxHD video with ALAC audio in a MOV container).
 
